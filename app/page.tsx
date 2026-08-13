@@ -5,31 +5,23 @@ import { PROJECTS } from "@/lib/projects";
 export default function Home() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
-      <div className="grid gap-4">
-        {/* Row 1: philosophy · role+soft · photo */}
-        <div className="grid gap-4 md:grid-cols-[1.1fr_1.3fr_1fr]">
-          <CardPhilosophy />
-          <CardRole />
-          <CardPhoto />
-        </div>
-
-        {/* Row 2: name+bio · photo continues */}
-        <div className="grid gap-4 md:grid-cols-[2.4fr_1fr]">
+      {/* Основной блок: слева карточки, справа сквозное фото на всю высоту */}
+      <div className="grid gap-4 md:grid-cols-[minmax(0,2.2fr)_minmax(220px,1fr)]">
+        <div className="grid gap-4 md:auto-rows-min">
+          <div className="grid gap-4 md:grid-cols-[1fr_1.25fr]">
+            <CardPhilosophy />
+            <CardRole />
+          </div>
           <CardName />
-          <div className="hidden md:block" aria-hidden />
-        </div>
-
-        {/* Row 3: works · photo continues (fills right column visually) */}
-        <div className="grid gap-4 md:grid-cols-[2.4fr_1fr]">
           <CardWorks />
-          <div className="hidden md:block" aria-hidden />
         </div>
+        <CardPhoto />
+      </div>
 
-        {/* Row 4: interests · languages · contacts */}
-        <div className="grid gap-4 md:grid-cols-[1fr_1.4fr]">
-          <CardInterests />
-          <CardContacts />
-        </div>
+      {/* Нижний блок: интересы + языки/контакты */}
+      <div className="mt-4 grid gap-4 md:grid-cols-[1fr_1.4fr]">
+        <CardInterests />
+        <CardContacts />
       </div>
 
       <footer className="mt-10 text-center text-xs text-ink-dim">
@@ -90,15 +82,16 @@ function CardRole() {
 
 function CardPhoto() {
   return (
-    <Card className="relative min-h-[360px] overflow-hidden !p-0">
-      <div className="absolute inset-0">
+    <Card className="relative min-h-[460px] overflow-hidden !p-0 md:min-h-full">
+      {/* Обёртка занимает всю высоту правой колонки */}
+      <div className="relative h-full min-h-[460px] w-full md:min-h-[900px]">
         <Image
           src="/portrait-raw.png"
           alt="Александр Корзун"
           fill
-          className="object-cover object-top"
+          className="object-cover object-[center_top]"
           priority
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 768px) 100vw, 30vw"
         />
       </div>
     </Card>
