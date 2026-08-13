@@ -1,40 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #09090b;
-  --color-bg-elev: #131316;
-  --color-bg-elev-2: #1c1c22;
-  --color-border: #27272a;
-  --color-fg: #fafafa;
-  --color-fg-soft: #a1a1aa;
-  --color-fg-dim: #71717a;
+  /* light "paper" palette per client's reference */
+  --color-paper: #ede8dd;
+  --color-paper-soft: #e5dfd2;
+  --color-paper-dark: #d9d3c5;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4a4a;
+  --color-ink-dim: #8a8580;
+  --color-border: rgba(26, 26, 26, 0.15);
+  --color-border-strong: rgba(26, 26, 26, 0.35);
 
-  --color-accent: #f59e0b;
-  --color-accent-dim: #d97706;
-  --color-accent-soft: #fbbf24;
+  --color-accent: #f97316;         /* orange */
+  --color-accent-soft: #fb923c;
+  --color-accent-dim: #ea580c;
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
-  --font-mono: ui-monospace, SFMono-Regular, monospace;
+  --font-hand: "Caveat", "Marker Felt", cursive;
 }
 
 html, body {
-  background: var(--color-bg);
-  color: var(--color-fg);
+  background: var(--color-paper);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
 }
 body { font-family: var(--font-sans); }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(245, 158, 11, 0.06), transparent 45%),
-    radial-gradient(circle at 90% 100%, rgba(245, 158, 11, 0.04), transparent 50%);
-}
-
 a { color: inherit; }
+
+.font-hand { font-family: var(--font-hand); }
