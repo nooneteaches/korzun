@@ -2,186 +2,175 @@ import Link from "next/link";
 import Image from "next/image";
 import { PROJECTS } from "@/lib/projects";
 
+/**
+ * Единый пергаментный лист.
+ * Тонкие линии-разделители через border-r/border-b на ячейках.
+ * Никаких rounded/shadow/отдельных cards — только сетка на бумаге.
+ */
 export default function Home() {
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
-      {/* Основной блок: слева карточки, справа сквозное фото на всю высоту */}
-      <div className="grid gap-4 md:grid-cols-[minmax(0,2.2fr)_minmax(220px,1fr)]">
-        <div className="grid gap-4 md:auto-rows-min">
-          <div className="grid gap-4 md:grid-cols-[1fr_1.25fr]">
-            <CardPhilosophy />
-            <CardRole />
+    <main className="min-h-[100dvh] bg-paper px-3 py-6 sm:px-6 sm:py-10">
+      <div className="mx-auto max-w-5xl border border-ink/30 bg-paper">
+        {/* Grid: 3 колонки, 4 ряда. Photo — row-span 3, col-3. */}
+        <div className="grid md:grid-cols-[1fr_1.35fr_1.05fr]">
+          {/* Row 1 col 1 — философия */}
+          <Cell borderR borderB>
+            <Label>Моя философия</Label>
+            <div className="mt-3 font-hand text-[42px] leading-[0.95] text-accent">
+              делать всё
+              <br />
+              интересным
+            </div>
+          </Cell>
+
+          {/* Row 1 col 2 — роль + софт */}
+          <Cell borderR borderB>
+            <Label>Предприниматель — активно осваиваю ИИ</Label>
+            <div className="mt-5">
+              <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-soft">Софт</div>
+              <div className="mt-3 flex flex-wrap gap-6">
+                <SoftIcon icon={<ClaudeIcon />} label="Claude Code" />
+                <SoftIcon icon={<CodexIcon />} label="Codex" />
+                <SoftIcon icon={<MidjourneyIcon />} label="Midjourney" />
+              </div>
+            </div>
+          </Cell>
+
+          {/* Col 3 rowspan 3 — фото на всю высоту, от Philosophy до Works */}
+          <div className="relative row-span-3 hidden min-h-[720px] border-b border-ink/30 md:block">
+            <Image
+              src="/portrait-raw.png"
+              alt="Александр Корзун"
+              fill
+              className="object-cover object-[center_top]"
+              priority
+              sizes="30vw"
+            />
           </div>
-          <CardName />
-          <CardWorks />
+          {/* Mobile-only photo (сжатая) */}
+          <div className="relative col-span-full h-[420px] border-b border-ink/30 md:hidden">
+            <Image
+              src="/portrait-raw.png"
+              alt="Александр Корзун"
+              fill
+              className="object-cover object-[center_top]"
+              priority
+              sizes="100vw"
+            />
+          </div>
+
+          {/* Row 2 col 1-2 — имя + био */}
+          <Cell borderR borderB colSpanMd={2}>
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+              Александр
+              <br />
+              Корзун
+            </h1>
+            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-ink-soft">
+              Привет! Меня зовут Александр, я из Москвы.
+            </p>
+            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-ink-soft">
+              В данный момент ищу интересные для себя проекты и реализую свои.
+            </p>
+          </Cell>
+
+          {/* Row 3 col 1-2 — последние работы */}
+          <Cell borderR borderB colSpanMd={2}>
+            <Label>Последние работы</Label>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {PROJECTS.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/projects/${p.slug}`}
+                  className="group flex items-center justify-between border border-ink/25 bg-paper px-4 py-3 transition hover:border-accent"
+                >
+                  <div>
+                    <div className="text-[15px] font-bold text-ink">{p.name}</div>
+                    <div className="text-xs text-ink-dim">{p.tagline}</div>
+                  </div>
+                  <span className="text-lg text-ink-dim transition group-hover:translate-x-0.5 group-hover:text-accent">
+                    →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </Cell>
+
+          {/* Row 4 col 1 — интересы */}
+          <Cell borderR>
+            <Label>Интересы</Label>
+            <ul className="mt-4 space-y-1.5 text-[14px] text-ink-soft">
+              <li>Продуктовые запуски</li>
+              <li>Спорт: футбол, теннис, единоборства</li>
+              <li>Знакомства и коммьюнити</li>
+              <li>Творчество, живопись</li>
+              <li>AI-инструменты</li>
+            </ul>
+          </Cell>
+
+          {/* Row 4 col 2-3 — языки + контакты */}
+          <Cell colSpanMd={2}>
+            <div className="grid gap-8 md:grid-cols-2">
+              <div>
+                <Label>Языки</Label>
+                <div className="mt-4 space-y-3">
+                  <LangBar label="Русский" value={100} />
+                  <LangBar label="Английский" value={60} />
+                </div>
+              </div>
+              <div className="flex flex-col justify-end gap-2 text-[14px]">
+                <ContactRow icon="phone" text="+7 926 083 91 89" href="tel:+79260839189" />
+                <ContactRow icon="tg" text="@alekorzun" href="https://t.me/alekorzun" />
+                <ContactRow icon="mail" text="avkorzun@me.com" href="mailto:avkorzun@me.com" />
+              </div>
+            </div>
+          </Cell>
         </div>
-        <CardPhoto />
       </div>
 
-      {/* Нижний блок: интересы + языки/контакты */}
-      <div className="mt-4 grid gap-4 md:grid-cols-[1fr_1.4fr]">
-        <CardInterests />
-        <CardContacts />
-      </div>
-
-      <footer className="mt-10 text-center text-xs text-ink-dim">
+      <footer className="mx-auto mt-6 max-w-5xl text-center text-xs text-ink-dim">
         © {new Date().getFullYear()} · Александр Корзун · Москва
       </footer>
     </main>
   );
 }
 
-// ── Cards ──
+// ── Grid cell ──
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div
-      className={`rounded-2xl border border-border bg-paper-soft/60 p-6 sm:p-7 ${className}`}
-    >
-      {children}
-    </div>
-  );
+function Cell({
+  children,
+  borderR,
+  borderB,
+  colSpanMd,
+}: {
+  children: React.ReactNode;
+  borderR?: boolean;
+  borderB?: boolean;
+  colSpanMd?: 2 | 3;
+}) {
+  const cs = colSpanMd === 2 ? "md:col-span-2" : colSpanMd === 3 ? "md:col-span-3" : "";
+  const br = borderR ? "md:border-r md:border-ink/30" : "";
+  const bb = borderB ? "border-b border-ink/30" : "";
+  return <div className={`p-6 sm:p-8 ${cs} ${br} ${bb}`}>{children}</div>;
 }
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <div className="text-xs font-bold uppercase tracking-[0.14em] text-ink">
+    <div className="text-xs font-bold uppercase tracking-[0.16em] text-ink">
       {children}
     </div>
   );
 }
 
-function CardPhilosophy() {
-  return (
-    <Card>
-      <Label>Моя философия</Label>
-      <div className="mt-3 font-hand text-[42px] leading-[1] text-accent">
-        делать всё
-        <br />
-        интересным
-      </div>
-    </Card>
-  );
-}
-
-function CardRole() {
-  return (
-    <Card>
-      <Label>Предприниматель — активно осваиваю ИИ</Label>
-      <div className="mt-6">
-        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-soft">Софт</div>
-        <div className="mt-3 flex gap-6">
-          <SoftIcon icon={<ClaudeIcon />} label="Claude Code" />
-          <SoftIcon icon={<CodexIcon />} label="Codex" />
-          <SoftIcon icon={<MidjourneyIcon />} label="Midjourney" />
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-function CardPhoto() {
-  return (
-    <Card className="relative min-h-[460px] overflow-hidden !p-0 md:min-h-full">
-      {/* Обёртка занимает всю высоту правой колонки */}
-      <div className="relative h-full min-h-[460px] w-full md:min-h-[900px]">
-        <Image
-          src="/portrait-raw.png"
-          alt="Александр Корзун"
-          fill
-          className="object-cover object-[center_top]"
-          priority
-          sizes="(max-width: 768px) 100vw, 30vw"
-        />
-      </div>
-    </Card>
-  );
-}
-
-function CardName() {
-  return (
-    <Card>
-      <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-        Александр
-        <br />
-        Корзун
-      </h1>
-      <p className="mt-6 max-w-md text-[15px] leading-relaxed text-ink-soft">
-        Привет! Меня зовут Александр, я из Москвы.
-      </p>
-      <p className="mt-3 max-w-md text-[15px] leading-relaxed text-ink-soft">
-        В данный момент ищу интересные для себя проекты и реализую свои.
-      </p>
-    </Card>
-  );
-}
-
-function CardWorks() {
-  return (
-    <Card>
-      <Label>Последние работы</Label>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        {PROJECTS.map((p) => (
-          <Link
-            key={p.slug}
-            href={`/projects/${p.slug}`}
-            className="group flex items-center justify-between rounded-xl border border-border bg-paper px-4 py-3 transition hover:border-accent hover:bg-paper-soft"
-          >
-            <div>
-              <div className="text-[15px] font-bold text-ink">{p.name}</div>
-              <div className="text-xs text-ink-dim">{p.tagline}</div>
-            </div>
-            <span className="text-lg text-ink-dim transition group-hover:translate-x-0.5 group-hover:text-accent">→</span>
-          </Link>
-        ))}
-      </div>
-    </Card>
-  );
-}
-
-function CardInterests() {
-  return (
-    <Card>
-      <Label>Интересы</Label>
-      <ul className="mt-4 space-y-1.5 text-[14px] text-ink-soft">
-        <li>Продуктовые запуски</li>
-        <li>Спорт: футбол, теннис, единоборства</li>
-        <li>Знакомства и коммьюнити</li>
-        <li>Творчество, живопись</li>
-        <li>AI-инструменты</li>
-      </ul>
-    </Card>
-  );
-}
-
-function CardContacts() {
-  return (
-    <Card>
-      <div className="grid gap-6 md:grid-cols-2">
-        <div>
-          <Label>Языки</Label>
-          <div className="mt-4 space-y-3">
-            <LangBar label="Русский" value={100} />
-            <LangBar label="Английский" value={60} />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <ContactRow icon="phone" text="+7 926 083 91 89" href="tel:+79260839189" />
-          <ContactRow icon="tg" text="@alekorzun" href="https://t.me/alekorzun" />
-          <ContactRow icon="mail" text="avkorzun@me.com" href="mailto:avkorzun@me.com" />
-        </div>
-      </div>
-    </Card>
-  );
-}
+// ── Bits ──
 
 function LangBar({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between">
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-soft">{label}</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-ink-soft">{label}</span>
       </div>
-      <div className="h-3 overflow-hidden rounded border border-ink/50 bg-paper">
+      <div className="h-3 overflow-hidden border border-ink/50 bg-paper">
         <div className="h-full bg-accent" style={{ width: `${value}%` }} />
       </div>
     </div>
@@ -190,7 +179,7 @@ function LangBar({ label, value }: { label: string; value: number }) {
 
 function ContactRow({ icon, text, href }: { icon: "phone" | "tg" | "mail"; text: string; href: string }) {
   return (
-    <a href={href} className="flex items-center gap-3 rounded-md px-1 py-1 text-[14px] text-ink transition hover:text-accent">
+    <a href={href} className="flex items-center gap-3 py-0.5 text-ink transition hover:text-accent">
       <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/40 text-ink-soft">
         {icon === "phone" && (
           <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -226,13 +215,10 @@ function SoftIcon({ icon, label }: { icon: React.ReactNode; label: string }) {
   );
 }
 
-// ── Soft icons (inline SVG for reliability) ──
-
 function ClaudeIcon() {
   return (
     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#d97656]">
       <svg viewBox="0 0 32 32" className="h-7 w-7 text-white" fill="currentColor">
-        {/* stylized burst */}
         <g>
           <rect x="15" y="4" width="2" height="8" rx="1" />
           <rect x="15" y="20" width="2" height="8" rx="1" />
@@ -262,7 +248,6 @@ function MidjourneyIcon() {
   return (
     <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-ink/20 bg-white">
       <svg viewBox="0 0 40 40" className="h-8 w-8 text-ink" fill="currentColor">
-        {/* stylized ship */}
         <path d="M8 20c0-6 5-11 12-11s12 5 12 11v2H8v-2z" />
         <path d="M8 24l4 6h16l4-6H8z" />
         <path d="M18 6h4v6h-4z" />
