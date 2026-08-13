@@ -42,7 +42,7 @@ export default function Home() {
               src="/portrait-raw.png"
               alt="Александр Корзун"
               fill
-              className="object-cover object-[center_top]"
+              className="object-contain object-top"
               priority
               sizes="30vw"
             />
@@ -53,7 +53,7 @@ export default function Home() {
               src="/portrait-raw.png"
               alt="Александр Корзун"
               fill
-              className="object-cover object-[center_top]"
+              className="object-contain object-top"
               priority
               sizes="100vw"
             />
