@@ -165,7 +165,7 @@ function Hero() {
   return (
     <header className="mb-16 sm:mb-24">
       <div className="text-xs uppercase tracking-[0.2em] text-fg-dim">Александр Корзун</div>
-      <h1 className="mt-3 font-serif text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl">
+      <h1 className="mt-3 text-5xl font-light leading-[1.05] tracking-tight sm:text-6xl">
         Предприниматель,<br />
         <span className="text-accent">запускаю сервисы</span> в спорте,
         знакомствах и творчестве.
