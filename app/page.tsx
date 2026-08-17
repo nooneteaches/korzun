@@ -3,28 +3,42 @@ import Image from "next/image";
 import { PROJECTS } from "@/lib/projects";
 
 /**
- * Единый пергаментный лист.
- * Тонкие линии-разделители через border-r/border-b на ячейках.
- * Никаких rounded/shadow/отдельных cards — только сетка на бумаге.
+ * Главная. Три раскладки:
+ * - Mobile (default): stack колонкой, всё вертикально.
+ * - md (tablet): grid 3 колонки, фото row-span (то что было).
+ * - lg+ (desktop): landscape 16:9 макет — фото занимает всю правую половину,
+ *   слева grid из 3 колонок × 4 рядов.
  */
 export default function Home() {
   return (
     <main className="min-h-[100dvh] bg-paper px-3 py-6 sm:px-6 sm:py-10">
-      <div className="mx-auto max-w-5xl border border-ink/30 bg-paper">
-        {/* Grid: 3 колонки, 4 ряда. Photo — row-span 3, col-3. */}
-        <div className="grid md:grid-cols-[1fr_1.35fr_1.05fr]">
-          {/* Row 1 col 1 — философия */}
+      <div className="mx-auto max-w-[1400px] border border-ink/30 bg-paper">
+        {/*
+          Grid config:
+          - mobile: 1 col
+          - md: 3 col (photo row-span)
+          - lg: 6 col — 3 контентных + 3 под фото (photo col-span 3 row-span 4)
+        */}
+        <div
+          className="
+            grid
+            md:grid-cols-[1fr_1.35fr_1.05fr]
+            lg:grid-cols-[0.9fr_1.2fr_1.2fr_2.7fr]
+            lg:auto-rows-min
+          "
+        >
+          {/* ── Row 1 · col 1 · Философия ── */}
           <Cell borderR borderB>
             <Label>Моя философия</Label>
-            <div className="mt-3 font-hand text-[42px] leading-[0.95] text-accent">
+            <div className="mt-3 font-hand text-[42px] leading-[0.95] text-accent lg:text-[54px]">
               делать всё
               <br />
               интересным
             </div>
           </Cell>
 
-          {/* Row 1 col 2 — роль + софт */}
-          <Cell borderR borderB>
+          {/* ── Row 1 · col 2-3 · Роль + Софт ── */}
+          <Cell borderR borderB colSpanMd={1} colSpanLg={2}>
             <Label>Предприниматель — активно осваиваю ИИ</Label>
             <div className="mt-5">
               <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-soft">Софт</div>
@@ -36,18 +50,18 @@ export default function Home() {
             </div>
           </Cell>
 
-          {/* Col 3 rowspan 3 — фото на всю высоту, от Philosophy до Works */}
-          <div className="relative row-span-3 hidden min-h-[720px] border-b border-ink/30 md:block">
+          {/* ── Фото · md: col 3 rowspan 3 · lg: col 4 rowspan 4 ── */}
+          <div className="relative hidden border-b border-ink/30 md:col-start-3 md:row-span-3 md:block md:min-h-[720px] lg:col-start-4 lg:row-span-4 lg:min-h-[820px]">
             <Image
               src="/portrait-raw.png"
               alt="Александр Корзун"
               fill
-              className="object-contain object-top"
+              className="object-contain object-[center_top] lg:object-[center_center]"
               priority
-              sizes="30vw"
+              sizes="(min-width:1024px) 45vw, 30vw"
             />
           </div>
-          {/* Mobile-only photo (сжатая) */}
+          {/* Mobile-only фото (сжатое) */}
           <div className="relative col-span-full h-[420px] border-b border-ink/30 md:hidden">
             <Image
               src="/portrait-raw.png"
@@ -59,14 +73,18 @@ export default function Home() {
             />
           </div>
 
-          {/* Row 2 col 1-2 — имя + био */}
-          <Cell borderR borderB colSpanMd={2}>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+          {/* ── Row 2 · Имя ── */}
+          <Cell borderR borderB>
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               Александр
               <br />
               Корзун
             </h1>
-            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-ink-soft">
+          </Cell>
+
+          {/* ── Row 2 · Приветствие ── */}
+          <Cell borderR borderB colSpanMd={1} colSpanLg={2}>
+            <p className="max-w-md text-[15px] leading-relaxed text-ink-soft lg:mt-6">
               Привет! Меня зовут Александр, я из Москвы.
             </p>
             <p className="mt-3 max-w-md text-[15px] leading-relaxed text-ink-soft">
@@ -74,10 +92,10 @@ export default function Home() {
             </p>
           </Cell>
 
-          {/* Row 3 col 1-2 — последние работы */}
-          <Cell borderR borderB colSpanMd={2}>
+          {/* ── Row 3 · Последние работы (широкая на все 3 контентные колонки) ── */}
+          <Cell borderR borderB colSpanMd={2} colSpanLg={3}>
             <Label>Последние работы</Label>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {PROJECTS.map((p) => (
                 <Link
                   key={p.slug}
@@ -96,7 +114,7 @@ export default function Home() {
             </div>
           </Cell>
 
-          {/* Row 4 col 1 — интересы */}
+          {/* ── Row 4 · Интересы ── */}
           <Cell borderR>
             <Label>Интересы</Label>
             <ul className="mt-4 space-y-1.5 text-[14px] text-ink-soft">
@@ -108,27 +126,27 @@ export default function Home() {
             </ul>
           </Cell>
 
-          {/* Row 4 col 2-3 — языки + контакты */}
-          <Cell colSpanMd={2}>
-            <div className="grid gap-8 md:grid-cols-2">
-              <div>
-                <Label>Языки</Label>
-                <div className="mt-4 space-y-3">
-                  <LangBar label="Русский" value={100} />
-                  <LangBar label="Английский" value={60} />
-                </div>
-              </div>
-              <div className="flex flex-col justify-end gap-2 text-[14px]">
-                <ContactRow icon="phone" text="+7 926 083 91 89" href="tel:+79260839189" />
-                <ContactRow icon="tg" text="@alekorzun" href="https://t.me/alekorzun" />
-                <ContactRow icon="mail" text="avkorzun@me.com" href="mailto:avkorzun@me.com" />
-              </div>
+          {/* ── Row 4 · Языки ── */}
+          <Cell borderR>
+            <Label>Языки</Label>
+            <div className="mt-4 space-y-3">
+              <LangBar label="Русский" value={100} />
+              <LangBar label="Английский" value={60} />
+            </div>
+          </Cell>
+
+          {/* ── Row 4 · Контакты ── */}
+          <Cell>
+            <div className="flex flex-col justify-end gap-2 text-[14px]">
+              <ContactRow icon="phone" text="+7 926 083 91 89" href="tel:+79260839189" />
+              <ContactRow icon="tg" text="@alekorzun" href="https://t.me/alekorzun" />
+              <ContactRow icon="mail" text="avkorzun@me.com" href="mailto:avkorzun@me.com" />
             </div>
           </Cell>
         </div>
       </div>
 
-      <footer className="mx-auto mt-6 max-w-5xl text-center text-xs text-ink-dim">
+      <footer className="mx-auto mt-6 max-w-[1400px] text-center text-xs text-ink-dim">
         © {new Date().getFullYear()} · Александр Корзун · Москва
       </footer>
     </main>
@@ -142,16 +160,25 @@ function Cell({
   borderR,
   borderB,
   colSpanMd,
+  colSpanLg,
 }: {
   children: React.ReactNode;
   borderR?: boolean;
   borderB?: boolean;
-  colSpanMd?: 2 | 3;
+  colSpanMd?: 1 | 2 | 3;
+  colSpanLg?: 1 | 2 | 3;
 }) {
-  const cs = colSpanMd === 2 ? "md:col-span-2" : colSpanMd === 3 ? "md:col-span-3" : "";
+  const csMd =
+    colSpanMd === 2 ? "md:col-span-2"
+    : colSpanMd === 3 ? "md:col-span-3"
+    : "";
+  const csLg =
+    colSpanLg === 2 ? "lg:col-span-2"
+    : colSpanLg === 3 ? "lg:col-span-3"
+    : "";
   const br = borderR ? "md:border-r md:border-ink/30" : "";
   const bb = borderB ? "border-b border-ink/30" : "";
-  return <div className={`p-6 sm:p-8 ${cs} ${br} ${bb}`}>{children}</div>;
+  return <div className={`p-6 sm:p-8 lg:p-10 ${csMd} ${csLg} ${br} ${bb}`}>{children}</div>;
 }
 
 function Label({ children }: { children: React.ReactNode }) {
