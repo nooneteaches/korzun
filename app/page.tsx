@@ -23,8 +23,8 @@ export default function Home() {
           className="
             grid
             md:grid-cols-[1fr_1.35fr_1.05fr]
-            lg:grid-cols-[0.9fr_1.2fr_1.2fr_2.7fr]
-            lg:auto-rows-min
+            lg:grid-cols-[1fr_1.35fr_1.35fr_1.7fr]
+            lg:min-h-[1100px]
           "
         >
           {/* ── Row 1 · col 1 · Философия ── */}
@@ -51,14 +51,14 @@ export default function Home() {
           </Cell>
 
           {/* ── Фото · md: col 3 rowspan 3 · lg: col 4 rowspan 4 ── */}
-          <div className="relative hidden border-b border-ink/30 md:col-start-3 md:row-span-3 md:block md:min-h-[720px] lg:col-start-4 lg:row-span-4 lg:min-h-[820px]">
+          <div className="relative hidden bg-paper border-b border-ink/30 md:col-start-3 md:row-span-3 md:block md:min-h-[720px] lg:col-start-4 lg:row-span-4 lg:min-h-[1100px]">
             <Image
               src="/portrait-raw.png"
               alt="Александр Корзун"
               fill
-              className="object-contain object-[center_top] lg:object-[center_center]"
+              className="object-contain object-center"
               priority
-              sizes="(min-width:1024px) 45vw, 30vw"
+              sizes="(min-width:1024px) 30vw, 30vw"
             />
           </div>
           {/* Mobile-only фото (сжатое) */}
